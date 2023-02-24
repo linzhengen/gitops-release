@@ -56,6 +56,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ${{ env.work-dir }}
-          platforms: linux/amd64,linux/arm64,darwin/arm64
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: "${{ env.image-name }}:${{ github.sha }},${{ env.image-name }}:latest"
