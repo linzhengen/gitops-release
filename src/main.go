@@ -6,5 +6,5 @@ import (
 )
 
 func main() {
-	fmt.Println("hello world", os.Getenv("ENV"))
+	fmt.Println("hello world 1", os.Getenv("ENV"))
 }
