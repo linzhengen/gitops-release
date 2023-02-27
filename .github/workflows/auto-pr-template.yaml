@@ -71,7 +71,7 @@ jobs:
             CICD automatic PR.
             ---
             ### head commit 
-            ${{ github.event.head_commit.message }}
+            - ${{ github.event.head_commit.message }}: ${{ github.event.head_commit:id }}
           labels: |
             automated-pr
           draft: false
