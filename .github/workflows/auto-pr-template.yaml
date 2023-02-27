@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Set git config
         run: |
-          git config --global user.email ${{ github.actor }}@users.noreply.github.com"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git config --global user.name "${{ github.actor }}"
       - name: Checkout
         uses: actions/checkout@v3
@@ -46,7 +46,15 @@ jobs:
           git commit -m "Deploy to: ${{ github.sha }}"
       - name: Push
         run: |
-          git push origin -f ${{ inputs.branch }}
+          git push origin -f HEAD:${{ inputs.branch }}
+#      - name: Update Changelog
+#        id: change-log
+#        run: |
+#          go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
+#          chglog=$(git-chglog)
+#          echo "chglog=$chglog" >> $GITHUB_OUTPUT
+#          rm git-chglog
+      #            ${{ steps.change-log.outputs.chglog }}
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
@@ -61,6 +69,9 @@ jobs:
           title: "[automated] Deploy to ${{ inputs.base-branch }}"
           body: |
             CICD automatic PR.
+            ---
+            ### head commit 
+            - ${{ github.event.head_commit.message }}: ${{ github.event.head_commit.id }}
           labels: |
             automated-pr
           draft: false
