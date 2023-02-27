@@ -1,5 +1,11 @@
 resources:
-  - ../../base
+- ../../base
 
 patchesStrategicMerge:
-  - deployment.yaml
+- deployment.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+- name: __IMAGE__
+  newName: seion/gitops-workflow-sample
+  newTag: a3ccbd1c1af5f4914749cc474e7fbea6782c8692
