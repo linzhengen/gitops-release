@@ -1,4 +1,4 @@
-name: Dev Deploy CI
+name: Automatic PR template
 
 on:
   workflow_call:
@@ -12,8 +12,11 @@ on:
       branch:
         required: true
         type: string
-      replace_image:
+      old_image:
         default: __IMAGE__
+        type: string
+      new_image:
+        required: true
         type: string
 
 jobs:
@@ -34,7 +37,7 @@ jobs:
 
       - name: Update K8s manifest
         run: |
-          kustomize edit set image sample-app="*:${CONTAINER_TAG}"
+          kustomize edit set image ${{ inputs.old_image }}=${{ inputs.new_image }}
         working-directory: ${{ inputs.target-dir }}
 
       - name: Commit
