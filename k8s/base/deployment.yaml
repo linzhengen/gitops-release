@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitops-workflow-sample
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitops-workflow-sample
+  template:
+    metadata:
+      labels:
+        app: gitops-workflow-sample
+    spec:
+      containers:
+        - name: app
+          image: __IMAGE__
+          resources: {}

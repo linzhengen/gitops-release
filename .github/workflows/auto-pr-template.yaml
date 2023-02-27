@@ -1,0 +1,63 @@
+name: Dev Deploy CI
+
+on:
+  workflow_call:
+    inputs:
+      target-dir:
+        required: true
+        type: string
+      base-branch:
+        required: true
+        type: string
+      branch:
+        required: true
+        type: string
+      replace_image:
+        default: __IMAGE__
+        type: string
+
+jobs:
+  auto-pr:
+    name: build-and-push
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set git config
+        run: |
+          git config --global user.email ${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "${{ github.actor }}"
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Update K8s manifest
+        run: |
+          kustomize edit set image sample-app="*:${CONTAINER_TAG}"
+        working-directory: ${{ inputs.target-dir }}
+
+      - name: Commit
+        run: |
+          git add .
+          git commit -m "Deploy to: ${{ github.sha }}"
+      - name: Push
+        run: |
+          git push origin -f ${{ inputs.branch }}
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Deploy to ${{ inputs.base-branch }}"
+          committer: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: false
+          branch: ${{ inputs.branch }}
+          base: ${{ inputs.base-branch }}
+          delete-branch: true
+          title: "[automated] Deploy to ${{ inputs.base-branch }}"
+          body: |
+            CICD automatic PR.
+          labels: |
+            automated-pr
+          draft: false
