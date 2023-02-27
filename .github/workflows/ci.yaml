@@ -2,7 +2,7 @@ name: Golang CI
 
 on:
   push:
-    path:
+    paths:
       - "src"
 
 env:
