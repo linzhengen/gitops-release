@@ -8,4 +8,4 @@ kind: Kustomization
 images:
 - name: __IMAGE__
   newName: seion/gitops-workflow-sample
-  newTag: abc4e81f73ad6057ef2c4e5ba63cbe5a688bb067
+  newTag: a3ccbd1c1af5f4914749cc474e7fbea6782c8692
