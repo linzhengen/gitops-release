@@ -50,9 +50,8 @@ jobs:
       - name: Update Changelog
         id: change-log
         run: |
-          curl -o git-chglog -L https://github.com/git-chglog/git-chglog/releases/download/0.15.4/git-chglog_linux_amd64
-          chmod u+x git-chglog
-          chglog=$(./git-chglog)
+          go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
+          chglog=$(git-chglog)
           echo "chglog=$chglog" >> $GITHUB_OUTPUT
           rm git-chglog
       - name: Create Pull Request
