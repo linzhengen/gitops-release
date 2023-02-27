@@ -21,7 +21,7 @@ on:
 
 jobs:
   auto-pr:
-    name: build-and-push
+    name: automatic PR
     runs-on: ubuntu-latest
     permissions:
       contents: write
