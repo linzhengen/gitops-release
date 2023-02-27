@@ -47,6 +47,14 @@ jobs:
       - name: Push
         run: |
           git push origin -f HEAD:${{ inputs.branch }}
+      - name: Update Changelog
+        id: change-log
+        run: |
+          curl -o git-chglog -L https://github.com/git-chglog/git-chglog/releases/download/0.15.4/git-chglog_linux_amd64
+          chmod u+x git-chglog
+          chglog=$(./git-chglog)
+          echo "chglog=$chglog" >> $GITHUB_OUTPUT
+          rm git-chglog
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
@@ -61,6 +69,10 @@ jobs:
           title: "[automated] Deploy to ${{ inputs.base-branch }}"
           body: |
             CICD automatic PR.
+            ${{ steps.change-log.outputs.chglog }}
+            ---
+            ### head commit 
+            ${{ github.event.head_commit.message }}
           labels: |
             automated-pr
           draft: false
